@@ -173,20 +173,12 @@ class AIPortfolioDoctor:
             return "Connect OpenAI for AI-powered insights"
 
         try:
-            prompt = f"""
-            As an expert DeFi portfolio doctor, analyze this portfolio:
+            # Use modern OpenAI client (v1.0+)
+            from openai import OpenAI
+            client = OpenAI(api_key=self.openai_api_key, base_url="https://api.comput3.ai/v1")
 
-            Health Score: {health_score}/100
-            Total Value: ${portfolio_data.get('total_value_usd', 0):,.2f}
-            Number of Assets: {len(portfolio_data.get('tokens', []))}
-            Main Issues: {', '.join(symptoms[:3]) if symptoms else 'None'}
-
-            Provide a brief, friendly diagnosis in 2-3 sentences like a doctor would explain to a patient.
-            Use medical metaphors and be encouraging but honest about risks.
-            """
-
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+            response = client.chat.completions.create(
+                model="llama3:70b",
                 messages=[{"role": "user", "content": prompt}],
                 max_tokens=150,
                 temperature=0.7

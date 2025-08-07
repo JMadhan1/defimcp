@@ -37,7 +37,7 @@
                     </div>
 
                     <button class="btn btn-success w-100" onclick="runHealthCheck()">
-                        <i data-feather="stethoscope" class="me-2"></i>
+                        <i data-feather="activity" class="me-2"></i>
                         Run Health Diagnosis
                     </button>
 
@@ -187,11 +187,21 @@
     font-size: 18px;
     font-weight: bold;
     color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .health-score-circle.excellent { background-color: #28a745; }
-.health-score-circle.good { background-color: #ffc107; }
+.health-score-circle.good { background-color: #ffc107; color: #000; }
 .health-score-circle.poor { background-color: #dc3545; }
+
+#healthResults, #strategyResults {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 .btn-purple {
     background-color: #6f42c1;
@@ -301,43 +311,55 @@ function displayHealthResults(diagnosis) {
     const detailsElement = document.getElementById('healthDetails');
 
     // Update score circle
-    scoreElement.textContent = diagnosis.health_score;
+    scoreElement.textContent = diagnosis.health_score || '0';
     const scoreCircle = scoreElement.parentElement;
     scoreCircle.className = 'health-score-circle ' + 
         (diagnosis.health_score >= 80 ? 'excellent' : 
          diagnosis.health_score >= 60 ? 'good' : 'poor');
 
     // Update diagnosis
-    diagnosisElement.textContent = diagnosis.diagnosis;
+    diagnosisElement.textContent = diagnosis.diagnosis || 'Analysis complete';
 
-    // Update details
+    // Update details with better visibility
     let detailsHTML = '';
 
     if (diagnosis.symptoms && diagnosis.symptoms.length > 0) {
-        detailsHTML += '<h6 class="text-danger">Symptoms:</h6><ul class="list-unstyled mb-3">';
+        detailsHTML += '<h6 class="text-danger mb-2">⚠️ Symptoms:</h6><ul class="mb-3" style="list-style: none; padding-left: 0;">';
         diagnosis.symptoms.forEach(symptom => {
-            detailsHTML += `<li><i data-feather="alert-triangle" class="text-warning me-1" style="width: 16px; height: 16px;"></i> ${symptom}</li>`;
+            detailsHTML += `<li class="mb-1" style="color: #dc3545;">• ${symptom}</li>`;
         });
         detailsHTML += '</ul>';
     }
 
     if (diagnosis.treatment_plan && diagnosis.treatment_plan.length > 0) {
-        detailsHTML += '<h6 class="text-success">Treatment Plan:</h6><ul class="list-unstyled mb-3">';
+        detailsHTML += '<h6 class="text-success mb-2">✅ Treatment Plan:</h6><ul class="mb-3" style="list-style: none; padding-left: 0;">';
         diagnosis.treatment_plan.forEach(treatment => {
-            detailsHTML += `<li><i data-feather="check-circle" class="text-success me-1" style="width: 16px; height: 16px;"></i> ${treatment}</li>`;
+            detailsHTML += `<li class="mb-1" style="color: #198754;">• ${treatment}</li>`;
         });
         detailsHTML += '</ul>';
     }
 
     if (diagnosis.ai_insights) {
-        detailsHTML += `<div class="bg-info bg-opacity-10 p-3 rounded"><strong>AI Insights:</strong> ${diagnosis.ai_insights}</div>`;
+        detailsHTML += `<div class="bg-info bg-opacity-10 p-3 rounded mb-3"><strong>🤖 AI Insights:</strong><br>${diagnosis.ai_insights}</div>`;
+    }
+
+    // Add fallback content if no data
+    if (!detailsHTML) {
+        detailsHTML = `
+            <div class="text-center text-muted py-4">
+                <p>Portfolio analysis complete! 📊</p>
+                <p>Score: ${diagnosis.health_score || 0}/100</p>
+            </div>
+        `;
     }
 
     detailsElement.innerHTML = detailsHTML;
     resultsDiv.style.display = 'block';
 
-    // Re-render feather icons
-    feather.replace();
+    // Scroll to results for better UX
+    setTimeout(() => {
+        resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
 }
 
 // Strategy Creation Functions
