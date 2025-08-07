@@ -12,6 +12,7 @@ try:
     OPENAI_AVAILABLE = True
 except ImportError:
     OPENAI_AVAILABLE = False
+    openai = None
 
 from ai_portfolio_doctor import AIPortfolioDoctor
 from ai_strategy_sommelier import AIStrategySommelier

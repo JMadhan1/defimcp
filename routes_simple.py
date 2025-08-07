@@ -13,7 +13,7 @@ try:
     from defi_tools.yield_farming import YieldFarmingOperations
     from defi_tools.portfolio import PortfolioManager
     # Import AI Agent and Portfolio Analytics (assuming these exist in your project)
-    from ai_agent import AIAgent
+    from ai_agent import DeFiAIAgent
     from portfolio_analytics import PortfolioAnalytics
 
     dex_ops = DEXOperations()
@@ -21,7 +21,7 @@ try:
     farming_ops = YieldFarmingOperations()
     portfolio_mgr = PortfolioManager()
     # Initialize AI components
-    ai_agent = AIAgent()
+    ai_agent = DeFiAIAgent()
     portfolio_analyzer = PortfolioAnalytics()
 
 except ImportError as e:
