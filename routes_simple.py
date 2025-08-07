@@ -53,6 +53,11 @@ def ai_agent_ui(): # Renamed to avoid conflict with imported ai_agent
     """AI Agent interface page"""
     return render_template('ai_agent.html')
 
+@app.route('/ai-features')
+def ai_features():
+    """AI Features showcase page"""
+    return render_template('ai_features.html')
+
 # API Routes
 
 @app.route('/api/v1/swap', methods=['POST'])
