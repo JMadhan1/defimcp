@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+
+{% block title %}AI Agent - DeFi MCP Server{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-1">
+                <i data-feather="cpu" class="me-2"></i>
+                DeFi AI Agent
+            </h1>
+            <p class="text-muted mb-0">Automated DeFi portfolio management and optimization</p>
+        </div>
+    </div>
+
+    <!-- Agent Status -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="card-title mb-1">
+                                <i data-feather="activity" class="me-2"></i>
+                                Agent Status
+                            </h5>
+                            <p class="text-muted mb-0">AI agent ready to analyze and optimize your DeFi portfolio</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <span class="badge bg-success fs-6">
+                                <i data-feather="check-circle" class="me-1"></i>
+                                Active
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i data-feather="bar-chart" class="text-primary mb-3" style="width: 48px; height: 48px;"></i>
+                    <h5 class="card-title">Portfolio Analysis</h5>
+                    <p class="card-text">Get AI-powered insights into your portfolio performance and recommendations.</p>
+                    <button class="btn btn-primary" onclick="analyzePortfolio()">
+                        Analyze Portfolio
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i data-feather="trending-up" class="text-success mb-3" style="width: 48px; height: 48px;"></i>
+                    <h5 class="card-title">Execute Strategy</h5>
+                    <p class="card-text">Let the AI agent execute automated DeFi strategies based on your risk profile.</p>
+                    <button class="btn btn-success" onclick="showStrategyModal()">
+                        Execute Strategy
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i data-feather="eye" class="text-info mb-3" style="width: 48px; height: 48px;"></i>
+                    <h5 class="card-title">Start Monitoring</h5>
+                    <p class="card-text">Enable continuous monitoring and automatic optimization of your positions.</p>
+                    <button class="btn btn-info" onclick="startMonitoring()">
+                        Start Monitoring
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i data-feather="brain" class="me-2"></i>
+                        AI Analysis Results
+                    </h5>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="clearResults()">
+                        <i data-feather="trash-2" class="me-1"></i>
+                        Clear
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="analysisResults" class="d-none">
+                        <!-- Analysis results will be displayed here -->
+                    </div>
+                    <div id="ai-insights-content" class="d-none">
+                        <!-- AI insights will be displayed here -->
+                    </div>
+                    <div id="emptyState" class="text-center py-5">
+                        <i data-feather="brain" class="text-muted mb-3" style="width: 64px; height: 64px;"></i>
+                        <h5 class="text-muted">No Analysis Yet</h5>
+                        <p class="text-muted">Click "Analyze Portfolio" to get AI-powered insights</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Strategy Modal -->
+<div class="modal fade" id="strategyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="target" class="me-2"></i>
+                    Execute AI Strategy
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="strategyForm">
+                    <div class="mb-3">
+                        <label for="walletAddress" class="form-label">Wallet Address</label>
+                        <input type="text" class="form-control" id="walletAddress" 
+                               placeholder="0x..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="blockchain" class="form-label">Blockchain</label>
+                        <select class="form-select" id="blockchain" required>
+                            <option value="ethereum">Ethereum</option>
+                            <option value="polygon">Polygon</option>
+                            <option value="solana">Solana</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="strategy" class="form-label">Strategy</label>
+                        <select class="form-select" id="strategy" required>
+                            <option value="ai_optimized">AI-Optimized Strategy (Recommended)</option>
+                            <option value="conservative_yield">Conservative Yield (Low Risk)</option>
+                            <option value="balanced_portfolio">Balanced Portfolio (Medium Risk)</option>
+                            <option value="aggressive_farming">Aggressive Farming (High Risk)</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-info">
+                        <i data-feather="info" class="me-2"></i>
+                        The AI will analyze your portfolio and execute the selected strategy automatically.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="executeStrategy()">
+                    <i data-feather="play" class="me-1"></i>
+                    Execute Strategy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// AI Agent interaction functions
+function analyzePortfolio() {
+    const walletAddress = prompt("Enter wallet address to analyze:");
+    if (!walletAddress) return;
+
+    showToast('AI agent analyzing portfolio...', 'info');
+
+    // Simulate API call to AI agent
+    setTimeout(() => {
+        // In a real scenario, this would involve calling your backend API
+        // which then interacts with the Comput3 AI endpoint.
+        // The response would include the standard analysis and potentially AI-generated insights.
+        displayAnalysisResults({
+            success: true,
+            analysis: {
+                total_value: 12500,
+                token_count: 8,
+                position_count: 3,
+                diversification_score: 0.65,
+                yield_potential: {
+                    active_positions: 2,
+                    average_apy: 0.074,
+                    yield_rating: "Medium"
+                },
+                recommendations: [
+                    {
+                        type: "yield_optimization",
+                        priority: "medium",
+                        action: "Consider lending USDC to Aave for 5.2% APY",
+                        reason: "Current yield can be improved"
+                    },
+                    {
+                        type: "diversification",
+                        priority: "low",
+                        action: "Portfolio diversification is adequate",
+                        reason: "Good spread across 8 different tokens"
+                    }
+                ],
+                // Example AI-generated insights from Comput3 AI endpoint
+                ai_insights: `Based on current market trends and your portfolio composition, the LLaMA 3 70B model suggests a potential shift towards higher-yield stablecoin lending protocols. Specifically, protocols offering enhanced security and audited smart contracts should be prioritized. Additionally, exploring yield farming opportunities in emerging Layer 2 solutions could offer significant upside, albeit with higher risk.`
+            }
+        });
+        showToast('Portfolio analysis completed!', 'success');
+    }, 2000);
+}
+
+function showStrategyModal() {
+    new bootstrap.Modal(document.getElementById('strategyModal')).show();
+}
+
+function executeStrategy() {
+    const form = document.getElementById('strategyForm');
+    const formData = new FormData(form);
+
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const walletAddress = formData.get('walletAddress');
+    const blockchain = formData.get('blockchain');
+    const strategy = formData.get('strategy');
+
+    bootstrap.Modal.getInstance(document.getElementById('strategyModal')).hide();
+    showToast(`Executing ${strategy.replace('_', ' ')} strategy...`, 'info');
+
+    // Simulate strategy execution
+    setTimeout(() => {
+        displayStrategyResults({
+            success: true,
+            strategy: strategy,
+            executed_actions: [
+                {
+                    action: {type: 'lend', params: {token: 'USDC', amount: '100'}},
+                    success: true,
+                    result: {tx_hash: '0x123...abc'}
+                }
+            ],
+            summary: {
+                total_actions: 1,
+                successful: 1,
+                failed: 0,
+                success_rate: 100
+            }
+        });
+        showToast('Strategy executed successfully!', 'success');
+    }, 3000);
+}
+
+function startMonitoring() {
+    const walletAddress = prompt("Enter wallet address to monitor:");
+    if (!walletAddress) return;
+
+    showToast('AI monitoring started for your wallet', 'success');
+
+    // In a real implementation, this would start a background monitoring process
+    setTimeout(() => {
+        showToast('Monitoring active - AI will check your portfolio every 5 minutes', 'info');
+    }, 1000);
+}
+
+function displayAnalysisResults(results) {
+    const analysisDiv = document.getElementById('analysisResults');
+    const aiInsightsDiv = document.getElementById('ai-insights-content');
+
+    if (!analysisDiv) return;
+
+    if (results.success) {
+        const analysis = results.analysis;
+        analysisDiv.innerHTML = `
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-primary mb-1">$${analysis.total_value.toLocaleString()}</div>
+                        <div class="small text-muted">Portfolio Value</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-info mb-1">${(analysis.diversification_score * 100).toFixed(0)}%</div>
+                        <div class="small text-muted">Diversification</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-success mb-1">${(analysis.yield_potential.average_apy * 100).toFixed(1)}%</div>
+                        <div class="small text-muted">Average APY</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-warning mb-1">${analysis.position_count}</div>
+                        <div class="small text-muted">Active Positions</div>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="mb-3">
+                <i data-feather="lightbulb" class="me-2"></i>
+                AI Recommendations
+            </h6>
+            <div class="list-group">
+                ${analysis.recommendations.map(rec => `
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <span class="badge bg-${rec.priority === 'high' ? 'danger' : rec.priority === 'medium' ? 'warning' : 'info'} me-2">
+                                    ${rec.priority.toUpperCase()}
+                                </span>
+                                ${rec.action}
+                            </h6>
+                        </div>
+                        <p class="mb-1 text-muted">${rec.reason}</p>
+                        <small class="text-muted">Type: ${rec.type}</small>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        // Display AI insights if available
+        if (analysis.ai_insights && aiInsightsDiv) {
+            aiInsightsDiv.innerHTML = `
+                <div class="alert alert-primary">
+                    <h6><i data-feather="cpu" class="me-2"></i>Comput3 AI Analysis (LLaMA 3 70B)</h6>
+                    <div style="white-space: pre-wrap;">${analysis.ai_insights}</div>
+                </div>
+            `;
+            aiInsightsDiv.classList.remove('d-none');
+        }
+
+        resultsDiv.classList.remove('d-none');
+        emptyState.classList.add('d-none');
+    }
+
+    feather.replace();
+}
+
+function displayStrategyResults(results) {
+    const resultsDiv = document.getElementById('analysisResults');
+    const emptyState = document.getElementById('emptyState');
+
+    if (results.success) {
+        const summary = results.summary;
+
+        resultsDiv.innerHTML = `
+            <div class="alert alert-success">
+                <h6 class="alert-heading">
+                    <i data-feather="check-circle" class="me-2"></i>
+                    Strategy Execution Completed
+                </h6>
+                <p class="mb-0">Successfully executed ${results.strategy.replace('_', ' ')} strategy</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-primary mb-1">${summary.total_actions}</div>
+                        <div class="small text-muted">Total Actions</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-success mb-1">${summary.successful}</div>
+                        <div class="small text-muted">Successful</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-danger mb-1">${summary.failed}</div>
+                        <div class="small text-muted">Failed</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="h4 text-info mb-1">${summary.success_rate}%</div>
+                        <div class="small text-muted">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="mb-3">
+                <i data-feather="list" class="me-2"></i>
+                Executed Actions
+            </h6>
+            <div class="list-group">
+                ${results.executed_actions.map(action => `
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">
+                                <span class="badge bg-${action.success ? 'success' : 'danger'} me-2">
+                                    ${action.success ? 'SUCCESS' : 'FAILED'}
+                                </span>
+                                ${action.action.type.toUpperCase()} Operation
+                            </h6>
+                        </div>
+                        <p class="mb-1">Token: ${action.action.params.token || 'N/A'}</p>
+                        <small class="text-muted">
+                            ${action.success ? `TX: ${action.result.tx_hash}` : `Error: ${action.result.error}`}
+                        </small>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        resultsDiv.classList.remove('d-none');
+        emptyState.classList.add('d-none');
+    }
+
+    feather.replace();
+}
+
+function clearResults() {
+    document.getElementById('analysisResults').classList.add('d-none');
+    document.getElementById('ai-insights-content').classList.add('d-none'); // Hide AI insights as well
+    document.getElementById('emptyState').classList.remove('d-none');
+}
+
+// Helper function to show toast notifications (assuming you have a toast implementation)
+function showToast(message, type) {
+    // This is a placeholder. In a real app, you'd use a toast library or custom implementation.
+    console.log(`[${type.toUpperCase()}] ${message}`);
+    alert(`${type.toUpperCase()}: ${message}`);
+}
+</script>
+{% endblock %}

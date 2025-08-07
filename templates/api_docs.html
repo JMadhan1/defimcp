@@ -1,0 +1,550 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - DeFi MCP Server{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h3 mb-1">
+                <i data-feather="book" class="me-2"></i>
+                API Documentation
+            </h1>
+            <p class="text-muted mb-0">Complete reference for the DeFi MCP Server API endpoints</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav class="nav nav-pills">
+                <a class="nav-link active" href="#authentication">Authentication</a>
+                <a class="nav-link" href="#endpoints">Endpoints</a>
+                <a class="nav-link" href="#mcp">MCP Protocol</a>
+                <a class="nav-link" href="#examples">Examples</a>
+                <a class="nav-link" href="#tokens">Tokens</a>
+                <a class="nav-link" href="#errors">Error Codes</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="row">
+        <div class="col-12">
+            <!-- Authentication Section -->
+            <section id="authentication" class="mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i data-feather="shield" class="me-2"></i>
+                            Authentication
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p>All API requests require authentication using an API key passed in the <code>X-API-Key</code> header.</p>
+
+                        <div class="bg-dark p-3 rounded">
+                            <code class="text-light">
+                                curl -H "X-API-Key: aya_your_api_key_here" \<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp; https://your-server.com/api/v1/portfolio/0x...
+                            </code>
+                        </div>
+
+                        <div class="alert alert-info mt-3">
+                            <i data-feather="info" class="me-2"></i>
+                            API keys start with <code>aya_</code> and can be generated through the web interface.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Endpoints Section -->
+            <section id="endpoints" class="mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i data-feather="link" class="me-2"></i>
+                            API Endpoints
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Swap Endpoint -->
+                        <div class="mb-4">
+                            <h5>
+                                <span class="badge bg-success me-2">POST</span>
+                                /api/v1/swap
+                            </h5>
+                            <p class="text-muted">Execute a token swap on the specified blockchain.</p>
+
+                            <h6>Request Body:</h6>
+                            <div class="bg-dark p-3 rounded mb-3">
+                                <pre class="text-light mb-0"><code>{
+  "wallet_address": "0x742d35Cc6635C0532925a3b8D2C69AaE2b8de59A",
+  "blockchain": "ethereum",
+  "token_in": "0xA0b86a33E6441c8C06DD2Ec58d0c08F0b3c4ac72",
+  "token_out": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+  "amount_in": "1000000",
+  "slippage": 0.5,
+  "protocol": "uniswap"
+}</code></pre>
+                            </div>
+
+                            <h6>Parameters:</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Parameter</th>
+                                            <th>Type</th>
+                                            <th>Required</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>wallet_address</code></td>
+                                            <td>string</td>
+                                            <td>Yes</td>
+                                            <td>Wallet address to execute swap from</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>blockchain</code></td>
+                                            <td>string</td>
+                                            <td>Yes</td>
+                                            <td>Blockchain network (ethereum, polygon, solana)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>token_in</code></td>
+                                            <td>string</td>
+                                            <td>Yes</td>
+                                            <td>Input token contract address</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>token_out</code></td>
+                                            <td>string</td>
+                                            <td>Yes</td>
+                                            <td>Output token contract address</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>amount_in</code></td>
+                                            <td>string</td>
+                                            <td>Yes</td>
+                                            <td>Amount of input token (in wei/smallest unit)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>slippage</code></td>
+                                            <td>number</td>
+                                            <td>No</td>
+                                            <td>Slippage tolerance (default: 0.5%)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>protocol</code></td>
+                                            <td>string</td>
+                                            <td>No</td>
+                                            <td>DEX protocol to use (default: uniswap)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Lend Endpoint -->
+                        <div class="mb-4">
+                            <h5>
+                                <span class="badge bg-success me-2">POST</span>
+                                /api/v1/lend
+                            </h5>
+                            <p class="text-muted">Lend assets to a lending protocol.</p>
+
+                            <div class="bg-dark p-3 rounded mb-3">
+                                <pre class="text-light mb-0"><code>{
+  "wallet_address": "0x742d35Cc6635C0532925a3b8D2C69AaE2b8de59A",
+  "blockchain": "ethereum",
+  "protocol": "aave_v3",
+  "token": "0xA0b86a33E6441c8C06DD2Ec58d0c08F0b3c4ac72",
+  "amount": "1000000000000000000"
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Farm Endpoint -->
+                        <div class="mb-4">
+                            <h5>
+                                <span class="badge bg-success me-2">POST</span>
+                                /api/v1/farm
+                            </h5>
+                            <p class="text-muted">Add liquidity to a yield farming pool.</p>
+
+                            <div class="bg-dark p-3 rounded mb-3">
+                                <pre class="text-light mb-0"><code>{
+  "wallet_address": "0x742d35Cc6635C0532925a3b8D2C69AaE2b8de59A",
+  "blockchain": "ethereum",
+  "protocol": "uniswap_v3",
+  "pool_id": "0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640",
+  "token_a": "0xA0b86a33E6441c8C06DD2Ec58d0c08F0b3c4ac72",
+  "token_b": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+  "amount_a": "1000000000000000000",
+  "amount_b": "1000000"
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Endpoint -->
+                        <div class="mb-4">
+                            <h5>
+                                <span class="badge bg-primary me-2">GET</span>
+                                /api/v1/portfolio/{wallet_address}
+                            </h5>
+                            <p class="text-muted">Get portfolio information for a wallet.</p>
+
+                            <div class="bg-dark p-3 rounded mb-3">
+                                <pre class="text-light mb-0"><code>GET /api/v1/portfolio/0x742f1...d9
+X-API-Key: aya_your_api_key_here</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Positions Endpoint -->
+                        <div class="mb-4">
+                            <h5>
+                                <span class="badge bg-primary me-2">GET</span>
+                                /api/v1/positions/{wallet_address}
+                            </h5>
+                            <p class="text-muted">Get DeFi positions for a wallet.</p>
+                        </div>
+
+                        <!-- Transactions Endpoint -->
+                        <div class="mb-4">
+                            <h5>
+                                <span class="badge bg-primary me-2">GET</span>
+                                /api/v1/transactions/{wallet_address}
+                            </h5>
+                            <p class="text-muted">Get transaction history for a wallet.</p>
+
+                            <h6>Query Parameters:</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Parameter</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>page</code></td>
+                                            <td>integer</td>
+                                            <td>Page number (default: 1)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>per_page</code></td>
+                                            <td>integer</td>
+                                            <td>Items per page (default: 50, max: 100)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MCP Protocol Section -->
+            <section id="mcp" class="mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i data-feather="cpu" class="me-2"></i>
+                            MCP Protocol
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <p>The server also supports the Model Context Protocol (MCP) for AI agent interactions via JSON-RPC 2.0.</p>
+
+                        <h5>MCP Endpoint</h5>
+                        <div class="bg-dark p-3 rounded mb-3">
+                            <code class="text-light">POST /mcp</code>
+                        </div>
+
+                        <h5>Available Methods</h5>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>defi.swap</code></td>
+                                        <td>Execute token swap</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>defi.lend</code></td>
+                                        <td>Lend assets to protocols</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>defi.farm</code></td>
+                                        <td>Add liquidity for yield farming</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>defi.portfolio</code></td>
+                                        <td>Get portfolio information</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>defi.positions</code></td>
+                                        <td>Get DeFi positions</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>defi.protocols</code></td>
+                                        <td>List supported protocols</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>defi.chains</code></td>
+                                        <td>List supported blockchains</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h5>Example MCP Request</h5>
+                        <div class="bg-dark p-3 rounded mb-3">
+                            <pre class="text-light mb-0"><code>{
+  "jsonrpc": "2.0",
+  "method": "defi.swap",
+  "params": {
+    "wallet_address": "0x...",
+    "blockchain": "ethereum",
+    "token_in": "0x...",
+    "token_out": "0x...",
+    "amount_in": "1000000"
+  },
+  "id": 1
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Examples Section -->
+            <section id="examples" class="mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i data-feather="code" class="me-2"></i>
+                            Examples
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h5>JavaScript Example</h5>
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>const response = await fetch('/api/v1/swap', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-Key': 'aya_your_api_key_here'
+  },
+  body: JSON.stringify({
+    wallet_address: '0x742d35Cc6635C0532925a3b8D2C69AaE2b8de59A',
+    blockchain: 'ethereum',
+    token_in: '0xA0b86a33E6441c8C06DD2Ec58d0c08F0b3c4ac72',
+    token_out: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    amount_in: '1000000',
+    slippage: 0.5
+  })
+});
+
+const result = await response.json();
+console.log(result);</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Python Example</h5>
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>import requests
+
+headers = {
+    'Content-Type': 'application/json',
+    'X-API-Key': 'aya_your_api_key_here'
+}
+
+data = {
+    'wallet_address': '0x742d35Cc6635C0532925a3b8D2C69AaE2b8de59A',
+    'blockchain': 'ethereum',
+    'protocol': 'aave',
+    'token': '0xA0b86a33E6441c8C06DD2Ec58d0c08F0b3c4ac72',
+    'amount': '1000000000000000000'
+}
+
+response = requests.post(
+    'https://your-server.com/api/v1/lend',
+    headers=headers,
+    json=data
+)
+
+print(response.json())</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Token Reference Section -->
+            <section id="tokens" class="mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i data-feather="coins" class="me-2"></i>
+                            Common Token Addresses
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h6 class="text-primary">Ethereum</h6>
+                                <ul class="list-unstyled small">
+                                    <li><strong>USDC:</strong> <code>0xA0b86a33E6441c8C06DD2Ec58d0c08F0b3c4ac72</code></li>
+                                    <li><strong>USDT:</strong> <code>0xdAC17F958D2ee523a2206206994597C13D831ec7</code></li>
+                                    <li><strong>DAI:</strong> <code>0x6B175474E89094C44Da98b954EedeAC495271d0F</code></li>
+                                    <li><strong>WETH:</strong> <code>0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2</code></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-primary">Polygon</h6>
+                                <ul class="list-unstyled small">
+                                    <li><strong>USDC:</strong> <code>0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174</code></li>
+                                    <li><strong>USDT:</strong> <code>0xc2132D05D31c914a87C6611C10748AEb04B58e8F</code></li>
+                                    <li><strong>DAI:</strong> <code>0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063</code></li>
+                                    <li><strong>WMATIC:</strong> <code>0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270</code></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="text-primary">Solana</h6>
+                                <ul class="list-unstyled small">
+                                    <li><strong>USDC:</strong> <code>EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v</code></li>
+                                    <li><strong>USDT:</strong> <code>Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB</code></li>
+                                    <li><strong>SOL:</strong> <code>So11111111111111111111111111111111111111112</code></li>
+                                    <li><strong>RAY:</strong> <code>4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="alert alert-info mt-3">
+                            <i data-feather="info" class="me-2"></i>
+                            These are real token contract addresses. Use them in your API requests for testing.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Response Codes Section -->
+            <section id="responses" class="mb-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">
+                            <i data-feather="check-circle" class="me-2"></i>
+                            Response Codes
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Message</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>400</code></td>
+                                        <td>Bad Request</td>
+                                        <td>Invalid request format or missing required fields</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>401</code></td>
+                                        <td>Unauthorized</td>
+                                        <td>Missing or invalid API key</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>404</code></td>
+                                        <td>Not Found</td>
+                                        <td>Endpoint or resource not found</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>429</code></td>
+                                        <td>Too Many Requests</td>
+                                        <td>Rate limit exceeded</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>500</code></td>
+                                        <td>Internal Server Error</td>
+                                        <td>Server error or blockchain network issue</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h5>Error Response Format</h5>
+                        <div class="bg-dark p-3 rounded">
+                            <pre class="text-light mb-0"><code>{
+  "error": "Validation failed",
+  "details": "Invalid wallet address format",
+  "code": "VALIDATION_ERROR"
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Update active navigation based on scroll position
+window.addEventListener('scroll', function() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop <= 100) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Initialize feather icons
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+});
+</script>
+{% endblock %}

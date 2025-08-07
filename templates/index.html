@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}DeFi MCP Server - Cross-chain DeFi Automation{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="mb-4">
+                <i data-feather="zap" class="text-primary" style="width: 48px; height: 48px;"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">DeFi MCP Server</h1>
+            <p class="lead text-muted mb-4">
+                A powerful Model Context Protocol server enabling AI agents to perform cross-chain DeFi operations 
+                including trading, lending, and yield farming across Ethereum, Polygon, and Solana.
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-4">
+                    <i data-feather="activity" class="me-2"></i>
+                    Open Dashboard
+                </a>
+                <a href="{{ url_for('api_docs') }}" class="btn btn-outline-secondary btn-lg px-4">
+                    <i data-feather="book" class="me-2"></i>
+                    API Documentation
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i data-feather="shuffle" class="text-primary" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h5 class="card-title">Cross-chain Trading</h5>
+                    <p class="card-text text-muted">
+                        Execute token swaps across Ethereum, Polygon, and Solana using leading DEX protocols 
+                        like Uniswap, QuickSwap, and Raydium.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i data-feather="trending-up" class="text-success" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h5 class="card-title">Lending & Borrowing</h5>
+                    <p class="card-text text-muted">
+                        Lend assets to earn yield or borrow against collateral using protocols like 
+                        Aave and Compound with automated position management.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i data-feather="layers" class="text-warning" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h5 class="card-title">Yield Farming</h5>
+                    <p class="card-text text-muted">
+                        Provide liquidity to earn trading fees and farm rewards across multiple 
+                        DeFi protocols with intelligent position optimization.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supported Blockchains -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Supported Blockchains</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="bg-primary bg-opacity-10 rounded-3 d-inline-flex p-3">
+                                    <i data-feather="hexagon" class="text-primary"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title">Ethereum</h5>
+                            <p class="card-text text-muted small">
+                                Uniswap, SushiSwap, Aave, Compound
+                            </p>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="bg-secondary bg-opacity-10 rounded-3 d-inline-flex p-3">
+                                    <i data-feather="triangle" class="text-secondary"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title">Polygon</h5>
+                            <p class="card-text text-muted small">
+                                QuickSwap, SushiSwap, Aave
+                            </p>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="bg-info bg-opacity-10 rounded-3 d-inline-flex p-3">
+                                    <i data-feather="sun" class="text-info"></i>
+                                </div>
+                            </div>
+                            <h5 class="card-title">Solana</h5>
+                            <p class="card-text text-muted small">
+                                Raydium, Orca, Jupiter
+                            </p>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">
+                        <i data-feather="play-circle" class="me-2"></i>
+                        Quick Start Guide
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-pill">1</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Generate API Key</h6>
+                                    <p class="text-muted small mb-0">
+                                        Create an API key to authenticate requests to the MCP server.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-pill">2</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Connect Wallets</h6>
+                                    <p class="text-muted small mb-0">
+                                        Add your blockchain wallets to start executing DeFi operations.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-pill">3</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Execute Operations</h6>
+                                    <p class="text-muted small mb-0">
+                                        Use the API endpoints to perform swaps, lending, and farming.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <span class="badge bg-primary rounded-pill">4</span>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Monitor Portfolio</h6>
+                                    <p class="text-muted small mb-0">
+                                        Track your positions and portfolio performance in real-time.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Endpoints Preview -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4">API Endpoints</h2>
+            <div class="row g-3">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i data-feather="shuffle" class="text-primary mb-2"></i>
+                            <h6 class="card-title">Swap Tokens</h6>
+                            <code class="small">POST /api/v1/swap</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i data-feather="trending-up" class="text-success mb-2"></i>
+                            <h6 class="card-title">Lend Assets</h6>
+                            <code class="small">POST /api/v1/lend</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i data-feather="layers" class="text-warning mb-2"></i>
+                            <h6 class="card-title">Farm Yield</h6>
+                            <code class="small">POST /api/v1/farm</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <i data-feather="pie-chart" class="text-info mb-2"></i>
+                            <h6 class="card-title">Portfolio</h6>
+                            <code class="small">GET /api/v1/portfolio</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Initialize feather icons after page load
+    document.addEventListener('DOMContentLoaded', function() {
+        feather.replace();
+    });
+</script>
+{% endblock %}

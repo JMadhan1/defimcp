@@ -1,0 +1,187 @@
+# Blockchain configuration for DeFi MCP Server
+
+chains:
+  ethereum:
+    name: "Ethereum"
+    chain_id: 1
+    native_token:
+      symbol: "ETH"
+      name: "Ethereum"
+      decimals: 18
+    rpc_endpoints:
+      - "https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}"
+      - "https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}"
+      - "https://cloudflare-eth.com"
+    explorer:
+      name: "Etherscan"
+      url: "https://etherscan.io"
+      api_url: "https://api.etherscan.io/api"
+    gas:
+      standard: 21000
+      token_transfer: 65000
+      swap: 200000
+      lend: 150000
+      farm: 300000
+    common_tokens:
+      USDC:
+        address: "0xA0b86a33E6411D40Ecaa6C4A6E5d75d8b3c7FD68"
+        decimals: 6
+        symbol: "USDC"
+        name: "USD Coin"
+      USDT:
+        address: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+        decimals: 6
+        symbol: "USDT"
+        name: "Tether USD"
+      DAI:
+        address: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+        decimals: 18
+        symbol: "DAI"
+        name: "Dai Stablecoin"
+      WETH:
+        address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+        decimals: 18
+        symbol: "WETH"
+        name: "Wrapped Ether"
+
+  polygon:
+    name: "Polygon"
+    chain_id: 137
+    native_token:
+      symbol: "MATIC"
+      name: "Polygon"
+      decimals: 18
+    rpc_endpoints:
+      - "https://polygon-rpc.com"
+      - "https://rpc-mainnet.matic.network"
+      - "https://matic-mainnet.chainstacklabs.com"
+    explorer:
+      name: "PolygonScan"
+      url: "https://polygonscan.com"
+      api_url: "https://api.polygonscan.com/api"
+    gas:
+      standard: 21000
+      token_transfer: 65000
+      swap: 200000
+      lend: 150000
+      farm: 300000
+    common_tokens:
+      USDC:
+        address: "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
+        decimals: 6
+        symbol: "USDC"
+        name: "USD Coin (PoS)"
+      USDT:
+        address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+        decimals: 6
+        symbol: "USDT"
+        name: "Tether USD (PoS)"
+      DAI:
+        address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063"
+        decimals: 18
+        symbol: "DAI"
+        name: "Dai Stablecoin (PoS)"
+      WMATIC:
+        address: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
+        decimals: 18
+        symbol: "WMATIC"
+        name: "Wrapped Matic"
+
+  solana:
+    name: "Solana"
+    chain_id: null
+    native_token:
+      symbol: "SOL"
+      name: "Solana"
+      decimals: 9
+    rpc_endpoints:
+      - "https://api.mainnet-beta.solana.com"
+      - "https://solana-api.projectserum.com"
+      - "https://rpc.ankr.com/solana"
+    explorer:
+      name: "Solscan"
+      url: "https://solscan.io"
+      api_url: "https://public-api.solscan.io"
+    gas:
+      standard: 5000  # lamports
+      token_transfer: 5000
+      swap: 10000
+      lend: 15000
+      farm: 20000
+    common_tokens:
+      USDC:
+        address: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+        decimals: 6
+        symbol: "USDC"
+        name: "USD Coin"
+      USDT:
+        address: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+        decimals: 6
+        symbol: "USDT"
+        name: "Tether USD"
+      SOL:
+        address: "So11111111111111111111111111111111111111112"
+        decimals: 9
+        symbol: "SOL"
+        name: "Wrapped SOL"
+      RAY:
+        address: "4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R"
+        decimals: 6
+        symbol: "RAY"
+        name: "Raydium"
+
+# Network configurations
+networks:
+  mainnet:
+    ethereum:
+      enabled: true
+      priority: 1
+    polygon:
+      enabled: true
+      priority: 2
+    solana:
+      enabled: true
+      priority: 3
+  
+  testnet:
+    ethereum_sepolia:
+      enabled: true
+      chain_id: 11155111
+      rpc_url: "https://eth-sepolia.public.blastapi.io"
+      native_token:
+        symbol: "ETH"
+        name: "Sepolia Ether"
+        decimals: 18
+      explorer: "https://sepolia.etherscan.io"
+      faucet: "https://sepoliafaucet.com"
+    polygon_mumbai:
+      enabled: true
+      chain_id: 80001
+      rpc_url: "https://rpc-mumbai.maticvigil.com"
+      native_token:
+        symbol: "MATIC"
+        name: "Mumbai MATIC"
+        decimals: 18
+      explorer: "https://mumbai.polygonscan.com"
+      faucet: "https://faucet.polygon.technology"
+    solana_devnet:
+      enabled: true
+      rpc_url: "https://api.devnet.solana.com"
+      native_token:
+        symbol: "SOL"
+        name: "Devnet SOL"
+        decimals: 9
+      explorer: "https://explorer.solana.com/?cluster=devnet"
+      faucet: "https://faucet.solana.com"
+
+# Global settings
+settings:
+  default_slippage: 0.5  # 0.5%
+  max_slippage: 50.0     # 50%
+  transaction_timeout: 300  # 5 minutes
+  confirmation_blocks:
+    ethereum: 12
+    polygon: 20
+    solana: 32
+  retry_attempts: 3
+  retry_delay: 5  # seconds

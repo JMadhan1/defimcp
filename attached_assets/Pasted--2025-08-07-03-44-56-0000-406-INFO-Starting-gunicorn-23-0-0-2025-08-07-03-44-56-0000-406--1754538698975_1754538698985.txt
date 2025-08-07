@@ -1,0 +1,74 @@
+[2025-08-07 03:44:56 +0000] [406] [INFO] Starting gunicorn 23.0.0
+[2025-08-07 03:44:56 +0000] [406] [INFO] Listening at: http://0.0.0.0:5000 (406)
+[2025-08-07 03:44:56 +0000] [406] [INFO] Using worker: sync
+[2025-08-07 03:44:56 +0000] [418] [INFO] Booting worker with pid: 418
+INFO:root:Database tables created successfully
+[2025-08-07 03:44:57 +0000] [406] [INFO] Handling signal: winch
+DEBUG:rlp.codec:Consider installing rusty-rlp to improve pyrlp performance with a rust basedbackend. Not currently functional for Python 3.11
+[2025-08-07 03:44:57 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:44:57 +0000] [406] [INFO] Handling signal: winch
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://mainnet.infura.io/v3/your-project-id, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://mainnet.infura.io/v3/your-project-id, <requests.sessions.Session object at 0x7f8c3ad4b910>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): mainnet.infura.io:443
+[2025-08-07 03:44:57 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:44:57 +0000] [406] [INFO] Handling signal: winch
+DEBUG:urllib3.connectionpool:https://mainnet.infura.io:443 "POST /v3/your-project-id HTTP/1.1" 401 19
+ERROR:blockchain.ethereum:Failed to connect to Ethereum network
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://polygon-rpc.com, <requests.sessions.Session object at 0x7f8c3ad683d0>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): polygon-rpc.com:443
+[2025-08-07 03:44:57 +0000] [406] [INFO] Handling signal: winch
+DEBUG:urllib3.connectionpool:https://polygon-rpc.com:443 "POST / HTTP/1.1" 200 94
+DEBUG:web3.providers.HTTPProvider:Getting response HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion, Response: {'id': 0, 'jsonrpc': '2.0', 'result': 'erigon/3.0.15/linux-amd64/go1.24.5'}
+INFO:blockchain.polygon:Connected to Polygon network
+[2025-08-07 03:44:58 +0000] [406] [INFO] Handling signal: winch
+ERROR:blockchain.solana:Failed to connect to Solana network: 'Client' object has no attribute 'get_health'
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://mainnet.infura.io/v3/your-project-id, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://mainnet.infura.io/v3/your-project-id, <requests.sessions.Session object at 0x7f8c3acfc690>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): mainnet.infura.io:443
+[2025-08-07 03:44:58 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:44:58 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:44:58 +0000] [406] [INFO] Handling signal: winch
+DEBUG:urllib3.connectionpool:https://mainnet.infura.io:443 "POST /v3/your-project-id HTTP/1.1" 401 19
+ERROR:blockchain.ethereum:Failed to connect to Ethereum network
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://polygon-rpc.com, <requests.sessions.Session object at 0x7f8c3acff790>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): polygon-rpc.com:443
+[2025-08-07 03:44:58 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:44:58 +0000] [406] [INFO] Handling signal: winch
+DEBUG:urllib3.connectionpool:https://polygon-rpc.com:443 "POST / HTTP/1.1" 200 94
+DEBUG:web3.providers.HTTPProvider:Getting response HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion, Response: {'id': 0, 'jsonrpc': '2.0', 'result': 'erigon/3.0.15/linux-amd64/go1.24.5'}
+INFO:blockchain.polygon:Connected to Polygon network
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://mainnet.infura.io/v3/your-project-id, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://mainnet.infura.io/v3/your-project-id, <requests.sessions.Session object at 0x7f8c3ab0ed10>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): mainnet.infura.io:443
+DEBUG:urllib3.connectionpool:https://mainnet.infura.io:443 "POST /v3/your-project-id HTTP/1.1" 401 19
+ERROR:blockchain.ethereum:Failed to connect to Ethereum network
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://polygon-rpc.com, <requests.sessions.Session object at 0x7f8c3ab156d0>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): polygon-rpc.com:443
+DEBUG:urllib3.connectionpool:https://polygon-rpc.com:443 "POST / HTTP/1.1" 200 94
+DEBUG:web3.providers.HTTPProvider:Getting response HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion, Response: {'id': 0, 'jsonrpc': '2.0', 'result': 'erigon/3.0.15/linux-amd64/go1.24.5'}
+INFO:blockchain.polygon:Connected to Polygon network
+ERROR:blockchain.solana:Failed to connect to Solana network: 'Client' object has no attribute 'get_health'
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://mainnet.infura.io/v3/your-project-id, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://mainnet.infura.io/v3/your-project-id, <requests.sessions.Session object at 0x7f8c3ab18b90>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): mainnet.infura.io:443
+DEBUG:urllib3.connectionpool:https://mainnet.infura.io:443 "POST /v3/your-project-id HTTP/1.1" 401 19
+ERROR:blockchain.ethereum:Failed to connect to Ethereum network
+DEBUG:web3.providers.HTTPProvider:Making request HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion
+DEBUG:web3._utils.http_session_manager.HTTPSessionManager:Session cached: https://polygon-rpc.com, <requests.sessions.Session object at 0x7f8c3ab1b310>
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): polygon-rpc.com:443
+DEBUG:urllib3.connectionpool:https://polygon-rpc.com:443 "POST / HTTP/1.1" 200 94
+DEBUG:web3.providers.HTTPProvider:Getting response HTTP. URI: https://polygon-rpc.com, Method: web3_clientVersion, Response: {'id': 0, 'jsonrpc': '2.0', 'result': 'erigon/3.0.15/linux-amd64/go1.24.5'}
+INFO:blockchain.polygon:Connected to Polygon network
+ERROR:blockchain.solana:Failed to connect to Solana network: 'Client' object has no attribute 'get_health'
+[2025-08-07 03:46:28 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:46:28 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:46:29 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:46:29 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:46:34 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:46:34 +0000] [406] [INFO] Handling signal: winch
+[2025-08-07 03:46:35 +0000] [406] [INFO] Handling signal: winch
+^C[2025-08-07 03:50:25 +0000] [406] [INFO] Handling signal: int
+[2025-08-07 03:50:25 +0000] [418] 

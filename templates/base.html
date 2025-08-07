@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DeFi MCP Server{% endblock %}</title>
+
+    <!-- Bootstrap CSS with Replit dark theme -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- Chart.js for portfolio visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}">
+                <i data-feather="zap" class="me-2"></i>
+                <span class="fw-bold">DeFi MCP</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('index') }}">
+                            <i data-feather="home" class="me-1"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            <i data-feather="bar-chart-2" class="me-1"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ai_agent') }}">
+                            <i data-feather="cpu" class="me-1"></i>
+                            AI Agent
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('api_docs') }}">
+                            <i data-feather="book" class="me-1"></i>
+                            API Docs
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i data-feather="settings" class="me-1"></i>
+                            Settings
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showApiKeyModal()">
+                                <i data-feather="key" class="me-2"></i>
+                                API Keys
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showWalletModal()">
+                                <i data-feather="wallet" class="me-2"></i>
+                                Wallets
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-top py-4 mt-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">
+                        <i data-feather="code" class="me-1"></i>
+                        DeFi MCP Server - Cross-chain DeFi automation for AI agents
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">
+                        Built for the Aya AI Hackathon
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- API Key Modal -->
+    <div class="modal fade" id="apiKeyModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i data-feather="key" class="me-2"></i>
+                        API Key Management
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i data-feather="info" class="me-2"></i>
+                        API keys are required to access the MCP server endpoints. Store them securely.
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Current API Key</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="currentApiKey" placeholder="No API key configured" readonly>
+                            <button class="btn btn-outline-secondary" type="button" onclick="toggleApiKeyVisibility()">
+                                <i data-feather="eye" id="apiKeyToggle"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generateApiKey()">
+                        <i data-feather="refresh-cw" class="me-2"></i>
+                        Generate New API Key
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Modal -->
+    <div class="modal fade" id="walletModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i data-feather="wallet" class="me-2"></i>
+                        Wallet Management
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i data-feather="shield" class="me-2"></i>
+                        This is a demo interface. In production, wallets would be managed securely through proper key management systems.
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <i data-feather="plus" class="me-2"></i>
+                                        Generate Wallet
+                                    </h6>
+                                    <p class="card-text text-muted small">Create a new wallet for the selected blockchain</p>
+                                    <select class="form-select mb-3" id="walletBlockchain">
+                                        <option value="ethereum">Ethereum</option>
+                                        <option value="polygon">Polygon</option>
+                                        <option value="solana">Solana</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-sm w-100" onclick="generateWallet()">
+                                        Generate Wallet
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <i data-feather="download" class="me-2"></i>
+                                        Import Wallet
+                                    </h6>
+                                    <p class="card-text text-muted small">Import existing wallet with private key</p>
+                                    <input type="password" class="form-control mb-2" id="importPrivateKey" placeholder="Private key">
+                                    <select class="form-select mb-3" id="importBlockchain">
+                                        <option value="ethereum">Ethereum</option>
+                                        <option value="polygon">Polygon</option>
+                                        <option value="solana">Solana</option>
+                                    </select>
+                                    <button class="btn btn-secondary btn-sm w-100" onclick="importWallet()">
+                                        Import Wallet
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <!-- Initialize Feather icons -->
+    <script>
+        feather.replace();
+    </script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

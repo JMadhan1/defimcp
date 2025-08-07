@@ -1,0 +1,217 @@
+# DeFi Protocol configurations
+
+protocols:
+  # Ethereum protocols
+  ethereum:
+    dex:
+      uniswap_v2:
+        name: "Uniswap V2"
+        type: "AMM"
+        router: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
+        factory: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+        supported_operations: ["swap", "add_liquidity", "remove_liquidity"]
+        fees:
+          swap: 0.3  # 0.3%
+        website: "https://uniswap.org"
+        
+      uniswap_v3:
+        name: "Uniswap V3"
+        type: "concentrated_liquidity"
+        router: "0xE592427A0AEce92De3Edee1F18E0157C05861564"
+        factory: "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+        supported_operations: ["swap", "add_liquidity", "remove_liquidity"]
+        fees:
+          swap: [0.05, 0.3, 1.0]  # 0.05%, 0.3%, 1.0%
+        website: "https://uniswap.org"
+        
+      sushiswap:
+        name: "SushiSwap"
+        type: "AMM"
+        router: "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F"
+        factory: "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
+        supported_operations: ["swap", "add_liquidity", "remove_liquidity"]
+        fees:
+          swap: 0.3  # 0.3%
+        website: "https://sushi.com"
+        
+      oneinch:
+        name: "1inch"
+        type: "aggregator"
+        router: "0x1111111254fb6c44bAC0beD2854e76F90643097d"
+        supported_operations: ["swap"]
+        api_url: "https://api.1inch.dev/swap/v5.2/1"
+        website: "https://1inch.io"
+    
+    lending:
+      aave_v3:
+        name: "Aave V3"
+        type: "lending_pool"
+        pool: "0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2"
+        data_provider: "0x7B4EB56E7CD4b454BA8ff71E4518426369a138a3"
+        supported_operations: ["lend", "borrow", "withdraw", "repay"]
+        website: "https://aave.com"
+        
+      compound_v3:
+        name: "Compound V3"
+        type: "money_market"
+        comptroller: "0x3d9819210A31b4961b30EF54bE2aeD79B9c9Cd3B"
+        supported_operations: ["lend", "borrow", "withdraw", "repay"]
+        website: "https://compound.finance"
+    
+    staking:
+      lido:
+        name: "Lido"
+        type: "liquid_staking"
+        contract: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"
+        supported_operations: ["stake", "unstake"]
+        website: "https://lido.fi"
+
+  # Polygon protocols  
+  polygon:
+    dex:
+      quickswap:
+        name: "QuickSwap"
+        type: "AMM"
+        router: "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"
+        factory: "0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32"
+        supported_operations: ["swap", "add_liquidity", "remove_liquidity"]
+        fees:
+          swap: 0.3  # 0.3%
+        website: "https://quickswap.exchange"
+        
+      sushiswap:
+        name: "SushiSwap"
+        type: "AMM"
+        router: "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"
+        factory: "0xc35DADB65012eC5796536bD9864eD8773aBc74C4"
+        supported_operations: ["swap", "add_liquidity", "remove_liquidity"]
+        fees:
+          swap: 0.3  # 0.3%
+        website: "https://sushi.com"
+        
+      oneinch:
+        name: "1inch"
+        type: "aggregator"
+        router: "0x1111111254fb6c44bAC0beD2854e76F90643097d"
+        supported_operations: ["swap"]
+        api_url: "https://api.1inch.dev/swap/v5.2/137"
+        website: "https://1inch.io"
+    
+    lending:
+      aave_v3:
+        name: "Aave V3"
+        type: "lending_pool"
+        pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
+        data_provider: "0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654"
+        supported_operations: ["lend", "borrow", "withdraw", "repay"]
+        website: "https://aave.com"
+
+  # Solana protocols
+  solana:
+    dex:
+      raydium:
+        name: "Raydium"
+        type: "AMM"
+        program_id: "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"
+        supported_operations: ["swap", "add_liquidity", "remove_liquidity"]
+        fees:
+          swap: 0.25  # 0.25%
+        api_url: "https://api.raydium.io"
+        website: "https://raydium.io"
+        
+      orca:
+        name: "Orca"
+        type: "AMM"
+        program_id: "9W959DqEETiGZocYWCQPaJ6sBmUzgfxXfqGeTEdp3aQP"
+        supported_operations: ["swap", "add_liquidity", "remove_liquidity"]
+        fees:
+          swap: 0.3  # 0.3%
+        api_url: "https://api.orca.so"
+        website: "https://orca.so"
+        
+      jupiter:
+        name: "Jupiter"
+        type: "aggregator"
+        supported_operations: ["swap"]
+        api_url: "https://quote-api.jup.ag/v6"
+        website: "https://jup.ag"
+    
+    lending:
+      solend:
+        name: "Solend"
+        type: "lending_pool"
+        program_id: "So1endDq2YkqhipRh3WViPa8hdiSpxWy6z3Z6tMCpAo"
+        supported_operations: ["lend", "borrow", "withdraw", "repay"]
+        website: "https://solend.fi"
+
+# Protocol categories
+categories:
+  dex:
+    name: "Decentralized Exchanges"
+    description: "Trade tokens without intermediaries"
+    
+  lending:
+    name: "Lending Protocols"
+    description: "Lend and borrow crypto assets"
+    
+  staking:
+    name: "Staking Protocols"
+    description: "Stake tokens to earn rewards"
+    
+  yield_farming:
+    name: "Yield Farming"
+    description: "Provide liquidity to earn trading fees"
+    
+  derivatives:
+    name: "Derivatives"
+    description: "Trade perpetuals and options"
+
+# Risk ratings
+risk_ratings:
+  low:
+    protocols: ["aave_v3", "compound_v3", "uniswap_v2", "uniswap_v3"]
+    description: "Well-established protocols with strong security track record"
+    
+  medium:
+    protocols: ["sushiswap", "quickswap", "raydium", "orca"]
+    description: "Established protocols with good security but some additional risk"
+    
+  high:
+    protocols: ["oneinch", "jupiter"]
+    description: "Aggregators and newer protocols with higher complexity"
+
+# Fee structures
+fee_structures:
+  swap:
+    uniswap_v2: 0.30
+    uniswap_v3: [0.05, 0.30, 1.00]
+    sushiswap: 0.30
+    quickswap: 0.30
+    raydium: 0.25
+    orca: 0.30
+    
+  lending:
+    variable_rates: true
+    typical_range: [2.0, 15.0]  # 2% to 15% APY
+    
+  liquidity_provision:
+    rewards: true
+    additional_tokens: true  # Often receive protocol tokens as rewards
+
+# Integration settings
+integration:
+  api_rate_limits:
+    oneinch: 10  # requests per second
+    jupiter: 5
+    moralis: 25
+    coingecko: 10
+    
+  timeout_settings:
+    swap: 30  # seconds
+    lend: 45
+    farm: 60
+    
+  retry_policies:
+    max_retries: 3
+    backoff_multiplier: 2
+    initial_delay: 1  # seconds
