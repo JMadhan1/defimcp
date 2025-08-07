@@ -7,12 +7,16 @@ import random
 import os
 
 # New imports for AI features
-import openai
+try:
+    import openai
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
+
 from ai_portfolio_doctor import AIPortfolioDoctor
 from ai_strategy_sommelier import AIStrategySommelier
 from ai_chat_assistant import AIChatAssistant
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class DeFiAIAgent:
@@ -489,7 +493,7 @@ class DeFiAIAgent:
 
 def main():
     """Demo function to show the AI agent in action"""
-    print("🤖 DeFi AI Agent Demo")
+    print("🤖 ONEDeFi AI Agent Demo")
     print("=" * 50)
 
     # Initialize agent (you would need to provide a real API key)
