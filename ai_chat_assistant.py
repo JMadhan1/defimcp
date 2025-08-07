@@ -1,17 +1,18 @@
 
 import logging
-import openai
 from typing import Dict, List, Any
 from datetime import datetime
 import json
+import os
+import requests
 
 logger = logging.getLogger(__name__)
 
 class AIChatAssistant:
     def __init__(self, openai_api_key: str = None):
-        self.openai_api_key = openai_api_key
-        if openai_api_key:
-            openai.api_key = openai_api_key
+        self.openai_api_key = openai_api_key or os.getenv('OPENAI_API_KEY', 'c3_api_key')
+        self.openai_api_url = os.getenv('OPENAI_API_URL', 'https://api.comput3.ai/v1')
+        self.model = os.getenv('OPENAI_MODEL', 'llama3:70b')
         
         # Conversation context
         self.conversation_history = []
@@ -55,58 +56,91 @@ class AIChatAssistant:
             }
     
     def _get_ai_response(self, user_message: str) -> Dict[str, Any]:
-        """Get AI-powered response using OpenAI"""
+        """Get AI-powered response using modern OpenAI API with full NLP"""
         try:
             # Build context for AI
             context = self._build_context()
             
-            # Create system prompt
-            system_prompt = f"""
-            You are an expert DeFi financial advisor AI with a friendly, knowledgeable personality.
-            You explain complex DeFi concepts in simple terms and always provide actionable advice.
-            
-            User Context:
-            {context}
-            
-            Guidelines:
-            - Be conversational and helpful
-            - Use emojis occasionally for friendliness
-            - Explain DeFi terms simply
-            - Always consider the user's portfolio when giving advice
-            - If you can't do something, suggest alternatives
-            - Be encouraging but honest about risks
-            """
-            
+            # Create comprehensive system prompt for true NLP understanding
+            system_prompt = f"""You are an expert DeFi financial advisor AI with deep knowledge of:
+- Decentralized Finance (DeFi) protocols, yields, and strategies
+- Blockchain networks (Ethereum, Polygon, Solana)
+- Portfolio management and risk assessment
+- Trading, lending, yield farming, and staking
+- Market analysis and investment advice
+- Technical analysis and on-chain data
+
+User Portfolio Context: {context}
+
+Personality & Communication:
+- Friendly, conversational, and helpful
+- Explain complex DeFi concepts in simple, everyday language  
+- Use emojis occasionally (📈, 💰, 🚀, ⚠️, 🤔)
+- Always provide actionable, specific advice
+- Be encouraging but honest about risks
+- Answer ANY question about finance, DeFi, crypto, or investment strategies
+
+Capabilities:
+- Analyze portfolio allocations and suggest improvements
+- Explain why transactions happened and their benefits
+- Recommend investment strategies based on risk tolerance
+- Compare DeFi protocols and their yields/risks
+- Help with yield farming, lending, and staking decisions
+- Provide market insights and trend analysis
+- Answer educational questions about blockchain and DeFi
+
+Always give detailed, helpful responses regardless of the question complexity."""
+
+            headers = {
+                'Authorization': f'Bearer {self.openai_api_key}',
+                'Content-Type': 'application/json'
+            }
+
+            # Build conversation messages
             messages = [{"role": "system", "content": system_prompt}]
             
-            # Add recent conversation history
+            # Add conversation history for context
             for conv in self.conversation_history[-3:]:
                 messages.append({"role": "user", "content": conv["user"]})
                 messages.append({"role": "assistant", "content": conv["ai"]})
             
             # Add current message
             messages.append({"role": "user", "content": user_message})
-            
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=messages,
-                max_tokens=300,
-                temperature=0.7
+
+            payload = {
+                "model": self.model,
+                "messages": messages,
+                "max_tokens": 400,
+                "temperature": 0.7,
+                "top_p": 0.9
+            }
+
+            # Make API request
+            response = requests.post(
+                f"{self.openai_api_url}/chat/completions",
+                headers=headers,
+                json=payload,
+                timeout=30
             )
             
-            ai_message = response.choices[0].message.content.strip()
-            
-            # Generate suggestions based on message
-            suggestions = self._generate_suggestions(user_message, ai_message)
-            
-            return {
-                "message": ai_message,
-                "suggestions": suggestions,
-                "type": "ai_response"
-            }
+            if response.status_code == 200:
+                data = response.json()
+                ai_message = data['choices'][0]['message']['content'].strip()
+                
+                # Generate contextual suggestions based on the AI response
+                suggestions = self._generate_smart_suggestions(user_message, ai_message)
+                
+                return {
+                    "message": ai_message,
+                    "suggestions": suggestions,
+                    "type": "ai_response"
+                }
+            else:
+                logger.warning(f"AI API returned status {response.status_code}: {response.text}")
+                return self._get_fallback_response(user_message)
             
         except Exception as e:
-            logger.warning(f"OpenAI response failed: {e}")
+            logger.warning(f"AI response failed: {e}")
             return self._get_fallback_response(user_message)
     
     def _build_context(self) -> str:
@@ -130,66 +164,113 @@ class AIChatAssistant:
         return " | ".join(context_parts) if context_parts else "No portfolio data available"
     
     def _get_fallback_response(self, user_message: str) -> Dict[str, Any]:
-        """Fallback response when AI is unavailable"""
+        """Enhanced fallback response with better NLP understanding"""
         user_message_lower = user_message.lower()
         
-        # Pattern matching for common queries
-        if any(word in user_message_lower for word in ["why", "moved", "transaction"]):
+        # More sophisticated pattern matching
+        if any(word in user_message_lower for word in ["why", "moved", "transaction", "transfer", "swap"]):
             return {
-                "message": "I can see you're asking about recent transactions! While I'd love to give you detailed AI insights, you can check your transaction history in the dashboard. Each transaction shows the protocol used and the reasoning behind automated moves. 📊",
-                "suggestions": ["View transaction history", "Check portfolio health", "Get strategy advice"],
+                "message": "I can see you're asking about recent transactions! 📊 While my AI brain is temporarily offline, I can still help explain common transaction patterns. Most moves are typically for yield optimization, gas cost reduction, or portfolio rebalancing. Check your dashboard for detailed transaction history with reasoning.",
+                "suggestions": ["View transaction details", "Check portfolio health", "Explain strategy logic"],
                 "type": "fallback"
             }
         
-        elif any(word in user_message_lower for word in ["buy", "should", "recommend"]):
+        elif any(word in user_message_lower for word in ["buy", "sell", "should", "recommend", "invest"]):
             return {
-                "message": "Great question about investment decisions! Based on your portfolio, I'd recommend checking your current allocation first. Generally, maintaining 20-30% in stable assets is wise, with the rest in quality DeFi opportunities. Want me to analyze your portfolio health? 💡",
-                "suggestions": ["Analyze portfolio health", "Create investment strategy", "Check yield opportunities"],
+                "message": "Great investment question! 💡 While my full AI analysis isn't available right now, I can share some general wisdom: diversification across 3-5 quality protocols, keeping 20-30% in stablecoins, and focusing on established DeFi blue chips (Aave, Uniswap, Compound) tends to work well. What's your risk tolerance?",
+                "suggestions": ["Analyze portfolio allocation", "Find safe yield opportunities", "Learn risk management"],
                 "type": "fallback"
             }
         
-        elif any(word in user_message_lower for word in ["gas", "fees", "expensive"]):
+        elif any(word in user_message_lower for word in ["gas", "fees", "expensive", "cost", "ethereum"]):
             return {
-                "message": "Ah, the eternal crypto struggle - gas fees! 😅 If you're on Ethereum and fees are high, consider moving some assets to Polygon or other L2s. You can save 90%+ on transaction costs while earning similar yields. Want me to show you how? ⛽",
-                "suggestions": ["Compare network fees", "Move to Polygon", "Optimize gas usage"],
+                "message": "Ah, gas fees - the eternal crypto challenge! ⛽ Here's the deal: Ethereum mainnet can be pricey ($10-100+ per transaction), but Layer 2s like Polygon offer 90%+ savings. Consider batching transactions, using L2s for smaller amounts, or timing transactions during low-usage periods (weekends, early morning UTC).",
+                "suggestions": ["Compare network costs", "Learn about Layer 2", "Optimize transaction timing"],
                 "type": "fallback"
             }
         
-        elif any(word in user_message_lower for word in ["yield", "earn", "apy"]):
+        elif any(word in user_message_lower for word in ["yield", "earn", "apy", "interest", "return", "profit"]):
             return {
-                "message": "Looking to boost those yields? Smart move! 📈 The best approach depends on your risk tolerance. Safe options include USDC lending on Aave (4-6% APY), while higher yields come from farming (10%+ but higher risk). What's your risk appetite?",
-                "suggestions": ["Find yield opportunities", "Compare lending rates", "Explore yield farming"],
+                "message": "Yield hunting - my favorite topic! 📈 Current DeFi landscape offers: Stablecoin lending (3-8% APY, low risk), LP farming (5-20%+ but impermanent loss risk), and staking (4-12%, varies by protocol). Higher yields = higher risks. Want specific protocol recommendations?",
+                "suggestions": ["Compare yield rates", "Learn about farming risks", "Find stable earnings"],
                 "type": "fallback"
             }
         
-        elif any(word in user_message_lower for word in ["help", "how", "what"]):
+        elif any(word in user_message_lower for word in ["risk", "safe", "dangerous", "loss", "secure"]):
             return {
-                "message": "I'm here to help with all your DeFi questions! 🤖 I can analyze your portfolio health, suggest investment strategies, explain transactions, and help optimize your yields. What would you like to explore first?",
-                "suggestions": ["Analyze portfolio", "Create strategy", "Explain DeFi concepts", "Check opportunities"],
+                "message": "Smart to ask about risks! ⚠️ DeFi risks include: smart contract bugs, impermanent loss (LP farming), liquidation (borrowing), and protocol governance risks. Mitigation strategies: diversify across protocols, start small, use established platforms, and never invest more than you can afford to lose.",
+                "suggestions": ["Assess portfolio risks", "Learn risk mitigation", "Check protocol safety scores"],
+                "type": "fallback"
+            }
+        
+        elif any(word in user_message_lower for word in ["defi", "what", "how", "explain", "learn", "understand"]):
+            return {
+                "message": "Love the curiosity! 🤓 DeFi (Decentralized Finance) lets you do traditional banking without banks - lending, borrowing, trading, earning interest. Key concepts: smart contracts (automated agreements), liquidity pools (shared funds for trading), and composability (protocols working together like Lego blocks).",
+                "suggestions": ["Learn DeFi basics", "Explore protocols", "Understand smart contracts"],
                 "type": "fallback"
             }
         
         else:
+            # Intelligent response based on any financial terms
+            if any(word in user_message_lower for word in ["portfolio", "balance", "holdings", "assets"]):
+                message = "I see you're asking about portfolio management! 💼 Even without my full AI capabilities, I can suggest checking your asset allocation, diversification across different DeFi sectors, and monitoring for opportunities to optimize yields while managing risk."
+                suggestions = ["Check portfolio health", "Optimize allocation", "Find rebalancing opportunities"]
+            else:
+                message = f"Thanks for the question! 🤖 While my AI is temporarily limited, I'm still here to help with DeFi strategy, yield optimization, risk assessment, and general crypto guidance. I can discuss any aspect of decentralized finance you're curious about!"
+                suggestions = ["Ask about specific protocols", "Get strategy advice", "Learn DeFi concepts", "Check market opportunities"]
+            
             return {
-                "message": "Thanks for chatting! I'm your DeFi assistant and I'm here to help optimize your portfolio. While I'm best with AI powers enabled, I can still help you navigate DeFi basics. What would you like to know? 🚀",
-                "suggestions": ["Ask about DeFi", "Check portfolio", "Get strategy help", "Learn about yields"],
+                "message": message,
+                "suggestions": suggestions,
                 "type": "fallback"
             }
     
-    def _generate_suggestions(self, user_message: str, ai_response: str) -> List[str]:
-        """Generate contextual suggestions"""
+    def _generate_smart_suggestions(self, user_message: str, ai_response: str) -> List[str]:
+        """Generate intelligent contextual suggestions based on conversation"""
         user_lower = user_message.lower()
+        response_lower = ai_response.lower()
         
-        if any(word in user_lower for word in ["portfolio", "holdings"]):
-            return ["Run portfolio health check", "Optimize allocation", "Find yield opportunities"]
-        elif any(word in user_lower for word in ["transaction", "moved", "why"]):
-            return ["View transaction details", "Check recent activity", "Explain strategy"]
-        elif any(word in user_lower for word in ["strategy", "invest", "recommend"]):
-            return ["Create custom strategy", "Check risk tolerance", "Compare options"]
-        elif any(word in user_lower for word in ["yield", "earn", "apy"]):
-            return ["Find best yields", "Compare protocols", "Calculate returns"]
-        else:
-            return ["Analyze portfolio", "Get recommendations", "Check opportunities", "Learn DeFi basics"]
+        suggestions = []
+        
+        # Portfolio-related suggestions
+        if any(word in user_lower for word in ["portfolio", "holding", "balance", "allocation"]):
+            suggestions.extend(["Show portfolio breakdown", "Check risk score", "Find rebalancing opportunities"])
+        
+        # Yield and earning suggestions
+        if any(word in user_lower + [response_lower] for word in ["yield", "apy", "earn", "stake", "farm"]):
+            suggestions.extend(["Compare yield rates", "Show farming opportunities", "Calculate potential returns"])
+        
+        # Transaction and strategy suggestions
+        if any(word in user_lower for word in ["transaction", "move", "swap", "trade"]):
+            suggestions.extend(["Explain transaction logic", "Show gas optimization", "View trading history"])
+        
+        # Learning and education suggestions
+        if any(word in user_lower for word in ["what", "how", "explain", "learn", "understand"]):
+            suggestions.extend(["Learn more DeFi basics", "Explore advanced strategies", "Get market insights"])
+        
+        # Protocol and platform suggestions
+        if any(word in user_lower + [response_lower] for word in ["aave", "uniswap", "compound", "curve"]):
+            suggestions.extend(["Compare protocols", "Check protocol risks", "View protocol analytics"])
+        
+        # Risk and safety suggestions
+        if any(word in user_lower + [response_lower] for word in ["risk", "safe", "secure", "loss"]):
+            suggestions.extend(["Assess portfolio risk", "Learn risk management", "Set up alerts"])
+        
+        # Market and price suggestions
+        if any(word in user_lower for word in ["price", "market", "trend", "bull", "bear"]):
+            suggestions.extend(["Get market analysis", "Check price trends", "Set price alerts"])
+        
+        # Default helpful suggestions if none match
+        if not suggestions:
+            suggestions = [
+                "Analyze my portfolio health",
+                "Find the best yields available", 
+                "Explain current DeFi trends",
+                "Help optimize my strategy"
+            ]
+        
+        # Return up to 3 most relevant suggestions
+        return suggestions[:3]
     
     def get_conversation_summary(self) -> Dict[str, Any]:
         """Get summary of conversation"""

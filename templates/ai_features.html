@@ -66,7 +66,7 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center mb-3">
                         <div class="bg-purple bg-opacity-10 rounded-3 p-3 me-3">
-                            <i data-feather="wine" class="text-purple" style="width: 24px; height: 24px;"></i>
+                            <i data-feather="dollar-sign" class="text-purple" style="width: 24px; height: 24px;"></i>
                         </div>
                         <h3 class="card-title mb-0">AI Strategy Sommelier</h3>
                     </div>
@@ -430,6 +430,8 @@ async function sendMessage() {
     input.value = '';
 
     try {
+        // The OpenAI API call needs to be updated to use the v1.0+ format
+        // This is a placeholder and assumes a backend endpoint handles the OpenAI interaction
         const response = await fetch('/api/v1/ai/chat', {
             method: 'POST',
             headers: {
