@@ -1,0 +1,9 @@
+modules = ["python-3.11", "web", "nodejs-20"]
+
+[nix]
+channel = "stable-25_05"
+packages = ["cargo", "libiconv", "libxcrypt", "libyaml", "openssl", "pkg-config", "rustc"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
