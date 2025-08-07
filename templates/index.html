@@ -12,11 +12,16 @@
             </div>
             <h1 class="display-4 fw-bold mb-3">DeFi MCP Server</h1>
             <p class="lead text-muted mb-4">
-                A powerful Model Context Protocol server enabling AI agents to perform cross-chain DeFi operations 
-                including trading, lending, and yield farming across Ethereum, Polygon, and Solana.
+                The world's first AI-powered DeFi assistant that acts like your personal financial advisor. 
+                Get portfolio health checkups, custom investment strategies, and plain-English explanations 
+                of complex DeFi operations across Ethereum, Polygon, and Solana.
             </p>
             <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-4">
+                <a href="{{ url_for('ai_features') }}" class="btn btn-primary btn-lg px-4">
+                    <i data-feather="brain" class="me-2"></i>
+                    Try AI Features
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-lg px-4">
                     <i data-feather="activity" class="me-2"></i>
                     Open Dashboard
                 </a>

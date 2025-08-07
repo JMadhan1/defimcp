@@ -7,3 +7,15 @@ packages = ["cargo", "libiconv", "libxcrypt", "libyaml", "openssl", "pkg-config"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[workflows]
+runButton = "Start DeFi AI Server"
+
+[[workflows.workflow]]
+name = "Start DeFi AI Server"
+author = 46094818
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"

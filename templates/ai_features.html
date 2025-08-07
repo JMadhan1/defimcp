@@ -1,0 +1,502 @@
+
+{% extends "base.html" %}
+
+{% block title %}AI Features - DeFi Assistant{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="mb-4">
+                <i data-feather="brain" class="text-primary" style="width: 64px; height: 64px;"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">AI-Powered DeFi Assistant</h1>
+            <p class="lead text-muted mb-4">
+                Your personal AI financial advisor that diagnoses portfolio health, creates custom strategies, 
+                and explains every decision in plain English. It's like having Warren Buffett in your wallet! 🧠💰
+            </p>
+        </div>
+    </div>
+
+    <!-- AI Portfolio Doctor -->
+    <div class="row mb-5">
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-success bg-opacity-10 rounded-3 p-3 me-3">
+                            <i data-feather="activity" class="text-success" style="width: 24px; height: 24px;"></i>
+                        </div>
+                        <h3 class="card-title mb-0">AI Portfolio Doctor</h3>
+                    </div>
+                    <p class="text-muted mb-4">Get a complete health checkup for your portfolio with AI-powered diagnosis and treatment plan.</p>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Wallet Address</label>
+                        <input type="text" class="form-control" id="healthWalletAddress" placeholder="0x..." />
+                    </div>
+                    
+                    <button class="btn btn-success w-100" onclick="runHealthCheck()">
+                        <i data-feather="stethoscope" class="me-2"></i>
+                        Run Health Diagnosis
+                    </button>
+                    
+                    <div id="healthResults" class="mt-4" style="display: none;">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="health-score-circle me-3">
+                                        <span id="healthScore">--</span>
+                                    </div>
+                                    <div>
+                                        <h5 id="healthDiagnosis" class="mb-1">--</h5>
+                                        <small class="text-muted">Portfolio Health</small>
+                                    </div>
+                                </div>
+                                <div id="healthDetails"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-purple bg-opacity-10 rounded-3 p-3 me-3">
+                            <i data-feather="wine" class="text-purple" style="width: 24px; height: 24px;"></i>
+                        </div>
+                        <h3 class="card-title mb-0">AI Strategy Sommelier</h3>
+                    </div>
+                    <p class="text-muted mb-4">Describe your goals in plain English and get a custom investment strategy crafted by AI.</p>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Your Investment Goals</label>
+                        <textarea class="form-control" id="investmentGoals" rows="3" 
+                                  placeholder="e.g., I want steady income but I'm scared of big losses..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-purple w-100" onclick="createStrategy()">
+                        <i data-feather="target" class="me-2"></i>
+                        Create My Strategy
+                    </button>
+                    
+                    <div id="strategyResults" class="mt-4" style="display: none;">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 id="strategyName" class="mb-2">--</h5>
+                                <div id="strategyDetails"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Assistant -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-info bg-opacity-10 rounded-3 p-3 me-3">
+                            <i data-feather="message-circle" class="text-info" style="width: 24px; height: 24px;"></i>
+                        </div>
+                        <h3 class="card-title mb-0">AI Chat Assistant</h3>
+                    </div>
+                    <p class="text-muted mb-4">Ask your AI assistant anything about DeFi. It knows your portfolio and can explain complex concepts in simple terms.</p>
+                    
+                    <div class="chat-container mb-3" id="chatContainer" style="height: 300px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px;">
+                        <div class="chat-message ai-message">
+                            <div class="message-bubble ai">
+                                <strong>AI Assistant:</strong> Hi! I'm your DeFi assistant. Ask me anything about your portfolio, strategies, or DeFi in general! 🤖
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="chatInput" 
+                               placeholder="Ask me anything about DeFi..." 
+                               onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button class="btn btn-info" onclick="sendMessage()">
+                            <i data-feather="send" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <small class="text-muted">Try asking: "Why did you move my money?" or "Should I buy more ETH?"</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Overview -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="mb-4 text-center">Why This AI Changes Everything</h3>
+                    <div class="row g-4">
+                        <div class="col-md-3 text-center">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i data-feather="shield-check" class="text-primary" style="width: 32px; height: 32px;"></i>
+                            </div>
+                            <h5>Instant Diagnosis</h5>
+                            <p class="text-muted small">Get portfolio health check in seconds with actionable treatment plan</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="bg-success bg-opacity-10 rounded-circle p-3 mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i data-feather="trending-up" class="text-success" style="width: 32px; height: 32px;"></i>
+                            </div>
+                            <h5>Custom Strategies</h5>
+                            <p class="text-muted small">AI creates personalized investment strategies based on your goals</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="bg-info bg-opacity-10 rounded-circle p-3 mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i data-feather="message-square" class="text-info" style="width: 32px; height: 32px;"></i>
+                            </div>
+                            <h5>Plain English</h5>
+                            <p class="text-muted small">Complex DeFi explained simply, like talking to a financial advisor</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="bg-warning bg-opacity-10 rounded-circle p-3 mx-auto mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                <i data-feather="zap" class="text-warning" style="width: 32px; height: 32px;"></i>
+                            </div>
+                            <h5>24/7 Available</h5>
+                            <p class="text-muted small">Your AI never sleeps, constantly optimizing and finding opportunities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.health-score-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.health-score-circle.excellent { background-color: #28a745; }
+.health-score-circle.good { background-color: #ffc107; }
+.health-score-circle.poor { background-color: #dc3545; }
+
+.btn-purple {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+    color: white;
+}
+
+.btn-purple:hover {
+    background-color: #5a359a;
+    border-color: #5a359a;
+    color: white;
+}
+
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+.chat-message {
+    margin-bottom: 15px;
+}
+
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.message-bubble.user {
+    background-color: #007bff;
+    color: white;
+    margin-left: auto;
+    text-align: right;
+}
+
+.message-bubble.ai {
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #e9ecef;
+}
+
+.chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.suggestion-pill {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+}
+
+.suggestion-pill:hover {
+    background-color: #bbdefb;
+}
+</style>
+
+<script>
+// Health Check Functions
+async function runHealthCheck() {
+    const walletAddress = document.getElementById('healthWalletAddress').value;
+    
+    if (!walletAddress) {
+        alert('Please enter a wallet address');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/v1/ai/portfolio-health', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                wallet_address: walletAddress,
+                blockchain: 'ethereum'
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            displayHealthResults(data.diagnosis);
+        } else {
+            alert('Health check failed: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Health check error:', error);
+        alert('Failed to run health check');
+    }
+}
+
+function displayHealthResults(diagnosis) {
+    const resultsDiv = document.getElementById('healthResults');
+    const scoreElement = document.getElementById('healthScore');
+    const diagnosisElement = document.getElementById('healthDiagnosis');
+    const detailsElement = document.getElementById('healthDetails');
+    
+    // Update score circle
+    scoreElement.textContent = diagnosis.health_score;
+    const scoreCircle = scoreElement.parentElement;
+    scoreCircle.className = 'health-score-circle ' + 
+        (diagnosis.health_score >= 80 ? 'excellent' : 
+         diagnosis.health_score >= 60 ? 'good' : 'poor');
+    
+    // Update diagnosis
+    diagnosisElement.textContent = diagnosis.diagnosis;
+    
+    // Update details
+    let detailsHTML = '';
+    
+    if (diagnosis.symptoms && diagnosis.symptoms.length > 0) {
+        detailsHTML += '<h6 class="text-danger">Symptoms:</h6><ul class="list-unstyled mb-3">';
+        diagnosis.symptoms.forEach(symptom => {
+            detailsHTML += `<li><i data-feather="alert-triangle" class="text-warning me-1" style="width: 16px; height: 16px;"></i> ${symptom}</li>`;
+        });
+        detailsHTML += '</ul>';
+    }
+    
+    if (diagnosis.treatment_plan && diagnosis.treatment_plan.length > 0) {
+        detailsHTML += '<h6 class="text-success">Treatment Plan:</h6><ul class="list-unstyled mb-3">';
+        diagnosis.treatment_plan.forEach(treatment => {
+            detailsHTML += `<li><i data-feather="check-circle" class="text-success me-1" style="width: 16px; height: 16px;"></i> ${treatment}</li>`;
+        });
+        detailsHTML += '</ul>';
+    }
+    
+    if (diagnosis.ai_insights) {
+        detailsHTML += `<div class="bg-info bg-opacity-10 p-3 rounded"><strong>AI Insights:</strong> ${diagnosis.ai_insights}</div>`;
+    }
+    
+    detailsElement.innerHTML = detailsHTML;
+    resultsDiv.style.display = 'block';
+    
+    // Re-render feather icons
+    feather.replace();
+}
+
+// Strategy Creation Functions
+async function createStrategy() {
+    const goals = document.getElementById('investmentGoals').value;
+    
+    if (!goals.trim()) {
+        alert('Please describe your investment goals');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/v1/ai/create-strategy', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                goals: goals
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            displayStrategyResults(data.strategy);
+        } else {
+            alert('Strategy creation failed: ' + data.error);
+        }
+    } catch (error) {
+        console.error('Strategy creation error:', error);
+        alert('Failed to create strategy');
+    }
+}
+
+function displayStrategyResults(strategy) {
+    const resultsDiv = document.getElementById('strategyResults');
+    const nameElement = document.getElementById('strategyName');
+    const detailsElement = document.getElementById('strategyDetails');
+    
+    nameElement.textContent = strategy.strategy_name;
+    
+    let detailsHTML = `
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <small class="text-muted">Risk Level</small>
+                <div class="fw-semibold">${strategy.risk_level}</div>
+            </div>
+            <div class="col-6">
+                <small class="text-muted">Expected APY</small>
+                <div class="fw-semibold">${strategy.expected_apy}</div>
+            </div>
+        </div>
+    `;
+    
+    if (strategy.allocation) {
+        detailsHTML += '<h6>Allocation:</h6><div class="mb-3">';
+        Object.entries(strategy.allocation).forEach(([key, value]) => {
+            const name = key.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            detailsHTML += `<div class="d-flex justify-content-between"><span>${name}:</span><span>${value}%</span></div>`;
+        });
+        detailsHTML += '</div>';
+    }
+    
+    if (strategy.personality) {
+        detailsHTML += `<div class="bg-purple bg-opacity-10 p-3 rounded mb-3"><strong>Sommelier Notes:</strong> ${strategy.personality}</div>`;
+    }
+    
+    if (strategy.implementation && strategy.implementation.length > 0) {
+        detailsHTML += '<h6>Implementation Steps:</h6><ol class="small">';
+        strategy.implementation.forEach(step => {
+            detailsHTML += `<li>${step}</li>`;
+        });
+        detailsHTML += '</ol>';
+    }
+    
+    detailsElement.innerHTML = detailsHTML;
+    resultsDiv.style.display = 'block';
+}
+
+// Chat Functions
+async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessageToChat(message, 'user');
+    input.value = '';
+    
+    try {
+        const response = await fetch('/api/v1/ai/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            addMessageToChat(data.response.message, 'ai', data.response.suggestions);
+        } else {
+            addMessageToChat('Sorry, I encountered an error. Please try again.', 'ai');
+        }
+    } catch (error) {
+        console.error('Chat error:', error);
+        addMessageToChat('Sorry, I\'m having trouble connecting. Please try again.', 'ai');
+    }
+}
+
+function addMessageToChat(message, sender, suggestions = []) {
+    const container = document.getElementById('chatContainer');
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'chat-message';
+    
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = `message-bubble ${sender}`;
+    
+    if (sender === 'user') {
+        bubbleDiv.innerHTML = `<strong>You:</strong> ${message}`;
+    } else {
+        bubbleDiv.innerHTML = `<strong>AI Assistant:</strong> ${message}`;
+    }
+    
+    messageDiv.appendChild(bubbleDiv);
+    
+    // Add suggestions for AI messages
+    if (sender === 'ai' && suggestions && suggestions.length > 0) {
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'chat-suggestions';
+        
+        suggestions.forEach(suggestion => {
+            const pill = document.createElement('button');
+            pill.className = 'suggestion-pill';
+            pill.textContent = suggestion;
+            pill.onclick = () => {
+                document.getElementById('chatInput').value = suggestion;
+                sendMessage();
+            };
+            suggestionsDiv.appendChild(pill);
+        });
+        
+        messageDiv.appendChild(suggestionsDiv);
+    }
+    
+    container.appendChild(messageDiv);
+    container.scrollTop = container.scrollHeight;
+}
+
+// Initialize feather icons
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+});
+</script>
+{% endblock %}
